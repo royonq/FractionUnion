@@ -1,37 +1,27 @@
 using System;
-using Data.NewFraction;
 using Enums;
 using FractionInfoMVP.Model.Intrerfaces;
 using FractionInfoMVP.View.Intrerfaces;
-using SwichPannelsMVP.PannelsModel.Interfaces;
-using SwichPannelsMVP.PannelsView.Interfaces;
-using UnityEngine;
-using UnityEngine.UI;
 
 namespace FractionInfoMVP.Presenter
 {
     public class FractionButtonsPresenter : IDisposable
     {
-        private readonly IEscapeHandler _escapeHandler;
         private readonly IFractionProfileView _fractionProfileView;
         private readonly IAdvancedProfileView _advancedProfileView;
-
-        private readonly IFractionButtonsModel _fractionButtonsModel;
+        
         private readonly IAdvancedProfileModel _advancedProfileModel;
         private readonly IFractionGeneratorModel _fractionGeneratorModel;
 
         private readonly FractionGeneratorPresenter _fractionGeneratorPresenter;
 
-        public FractionButtonsPresenter(IEscapeHandler escapeHandler, IFractionProfileView fractionProfileView,
-            IAdvancedProfileView advancedProfileView,
-            IFractionButtonsModel fractionButtonsModel, IAdvancedProfileModel advancedProfileModel,
+        public FractionButtonsPresenter(IFractionProfileView fractionProfileView,
+            IAdvancedProfileView advancedProfileView, IAdvancedProfileModel advancedProfileModel,
             IFractionGeneratorModel fractionGeneratorModel, FractionGeneratorPresenter fractionGeneratorPresenter)
         {
-            _escapeHandler = escapeHandler;
             _fractionProfileView = fractionProfileView;
             _advancedProfileView = advancedProfileView;
 
-            _fractionButtonsModel = fractionButtonsModel;
             _advancedProfileModel = advancedProfileModel;
             _fractionGeneratorModel = fractionGeneratorModel;
 
@@ -42,10 +32,6 @@ namespace FractionInfoMVP.Presenter
 
         private void Init()
         {
-            _fractionButtonsModel.SetFractionPannels(_escapeHandler.GetShowPannelButton);
-
-            _escapeHandler.OnButtonClick += OpenPannel;
-            _escapeHandler.OnHidePannel += HidePannel;
             _fractionProfileView.OnButtonClick += ShowProfile;
             _advancedProfileView.OnAddReputation += ChangeReputation;
             _advancedProfileView.OnMakePact += MakePact;
@@ -54,23 +40,12 @@ namespace FractionInfoMVP.Presenter
 
         public void Dispose()
         {
-            _escapeHandler.OnButtonClick -= OpenPannel;
-            _escapeHandler.OnHidePannel -= HidePannel;
             _fractionProfileView.OnButtonClick -= ShowProfile;
             _advancedProfileView.OnAddReputation -= ChangeReputation;
             _advancedProfileView.OnMakePact -= MakePact;
             _advancedProfileView.OnMakeWar -= MakeWarPact;
         }
-
-        private void OpenPannel(GameObject pannel)
-        {
-            _fractionButtonsModel.OpenFractionPannel(pannel);
-        }
-
-        private void HidePannel()
-        {
-            _fractionButtonsModel.CloseFractionPannels();
-        }
+        
         
         
         private void ShowProfile(int index)

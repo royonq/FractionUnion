@@ -1,19 +1,18 @@
 using System;
+using System.Collections.Generic;
 using SwichPannelsMVP.Buttons;
-using SwichPannelsMVP.PannelsView.Interfaces;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace SwichPannelsMVP.PannelsView.View
 {
-   public class EscapeHandler : MonoBehaviour ,IEscapeHandler
+   public class EscapeHandler : MonoBehaviour
    {
-      public event Action<GameObject> OnButtonClick;
-      public event Action OnHidePannel;
-
+      
+      private readonly Stack<GameObject> _pannelStack = new();
+      
       
       [SerializeField] private GameObject _showPannelButton;
-      public GameObject GetShowPannelButton => _showPannelButton;
 
       private void OnEnable()
       {
@@ -27,14 +26,37 @@ namespace SwichPannelsMVP.PannelsView.View
       
       private void OnClick(GameObject pannel)
       {
-         OnButtonClick?.Invoke(pannel);
+         OpenFractionPannel(pannel);
       }
       
       public void OnHideFractionPannel(InputAction.CallbackContext context)
       {
          if (context.performed)
          {
-            OnHidePannel?.Invoke();
+            CloseFractionPannels();
+         }
+      }
+      
+
+      private void OpenFractionPannel(GameObject pannel)
+      {
+         pannel.SetActive(true);
+         _pannelStack.Push(pannel);
+      }
+
+      private void CloseFractionPannels()
+      {
+         if (_pannelStack.Count <= 0)
+         {
+            return;
+         }
+            
+         var lastPannel = _pannelStack.Pop();
+         lastPannel.SetActive(false);
+
+         if (_pannelStack.Count == 0)
+         {
+            _showPannelButton.SetActive(true);
          }
       }
    }

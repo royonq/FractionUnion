@@ -4,15 +4,15 @@ using UnityEngine;
 
 namespace FractionInfoMVP.Presenter
 {
-    public class FractionGeneratorPresenter : MonoBehaviour
+    public class FractionGeneratorPresenter
     {
-        private readonly IFractionBlockView fractionBlockView;
+        private readonly IFractionBlockView _fractionBlockView;
         private readonly IFractionGeneratorModel _fractionGeneratorModel;
 
         public FractionGeneratorPresenter(IFractionBlockView fractionBlockView,
             IFractionGeneratorModel fractionGeneratorModel)
         {
-            this.fractionBlockView = fractionBlockView;
+            _fractionBlockView = fractionBlockView;
             _fractionGeneratorModel = fractionGeneratorModel;
 
             fractionGeneratorModel.GenerateFractions();
@@ -27,21 +27,21 @@ namespace FractionInfoMVP.Presenter
             {
                 var fraction = _fractionGeneratorModel.GetFractionByIndex(i);
 
-                fractionBlockView.SetFractionInfo(i, fraction.Icon,fraction.TradePactSprite,fraction.SciencePactSprite
+                _fractionBlockView.SetFractionInfo(i, fraction.Icon,fraction.TradePactSprite,fraction.SciencePactSprite
                     ,fraction.Name, fraction.Reputation,fraction.GetReputationColor());
             }
         }
 
         public void UpdateFractionInfo(Fraction fraction)
         {
-            fractionBlockView.SetFractionInfo(fraction.Id, fraction.Icon,fraction.TradePactSprite,fraction.SciencePactSprite
+            _fractionBlockView.SetFractionInfo(fraction.Id, fraction.Icon,fraction.TradePactSprite,fraction.SciencePactSprite
                 ,fraction.Name, fraction.Reputation,fraction.GetReputationColor());
         }
         
         
         public void SetPactActive(int index, UnionTypes unionType, bool isActive)
         {
-            fractionBlockView.SetPactActive(index, unionType, isActive);
+            _fractionBlockView.SetPactActive(index, unionType, isActive);
         }
     }
 }
